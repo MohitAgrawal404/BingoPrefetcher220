@@ -31,7 +31,7 @@
 
 #include "memory/mem_req.h"
 
-#define PREF_TRACKERS_NUM 16
+#define PREF_TRACKERS_NUM 17
 
 // typedef in globals/global_types.h
 struct Pref_Mem_Req_struct {
@@ -121,6 +121,8 @@ struct HWP_struct {
                        uns32 global_hist);  // called when a ul1 access hits a
                                             // prefetched line for the first
                                             // time
+  void (*ul1_cache_evict)(uns8 proc_id, Addr lineAddr); // called when a ul1 evicts a line
+                                            // mostly for Bingo's auxilary data
 };
 
 /* Per core prefetching data */

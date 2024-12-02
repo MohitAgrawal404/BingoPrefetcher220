@@ -1,69 +1,45 @@
-#ifndef __STREAM_PREF_H__
-#define __STREAM_PREF_H__
+#ifndef __BINGO_PREF_H__
+#define __BINGO_PREF_H__
 
-#include "globals/global_types.h"
+#include "pref_common.h"
 
-/**************************************************************************************/
-/* Forward Declarations */
 
-struct Mem_Req_struct;
-struct Pref_Mem_Req_struct;
-struct Stream_Buffer_struct;
+typedef struct Footprint_struct {
+    bool accessed[64];  // Size of page devided by block size
+                        // 4096/64
+} Footprint;
 
-/**************************************************************************************/
-/* Types */
+typedef struct Aux_Entry_Struct {
+  Footprint    footprint; // Bit vector for accessed blocks
+  Addr      trigger_addr; // The address that triggered this entry
+  Addr      pc;           // The PC of the trigger instruction
+} Aux_Entry;
 
-typedef struct Bingo_History_Entry_Struct {
-  Addr last_address; // The last address accessed in this stream
-  int delta_history[DELTA_HISTORY_SIZE]; // Array to store the delta history for the stream
-  int current_delta_index; // Points to the next free index in the delta history array
-} Bingo_History_Entry;
+// This will be put into a dictionary with key as Page address
 
-typedef struct Bingo_Pattern_Detection_Entry_Struct {
-  int pattern[MAX_PATTERN_LENGTH]; // A detected delta pattern
-  int next_delta; // The predicted next delta after the pattern
-} Bingo_Pattern_Detection_Entry;
 
-typedef struct Stream_HWP_Struct {
-  // Stream HWP (Hardware Prefetcher)
-  Stream_Buffer* stream;
-  Stream_Buffer* l2hit_stream;
+typedef struct Bingo_History_Table_Struct {
+  // table hashed by PC + Offset and each entry is PC+Address, footprint
+  Addr      pc_plus_address;
+  Addr      pc_plus_offset;
+  Aux_Entry entry; // Holds the original data from the Aux data  
+} Bingo_History_Table; // this is one entry in the Bingo table will also be in a dictionary
 
-  /* Prefetch request queues */
-  Pref_Mem_Req* pref_req_queue;
-  Pref_Mem_Req* l2hit_pref_req_queue;
-  Pref_Mem_Req* l2hit_l2send_req_queue;
+typedef struct Bingo_Table_Line_Struct {
+    Bingo_History_Table line[16];  // The entries
+    int usage_order[16];           // Tracks the order of usage for LRU
+    int current_size;              // Keeps track of the number of valid entries in the line
+} Bingo_Table_Line;
 
-  /* Bingo-specific data structures */
-  Bingo_History_Entry* delta_history_table; // Table for tracking delta history of streams
-  Bingo_Pattern_Detection_Entry* pattern_detection_table; // Table for storing detected patterns
-  Pref_Mem_Req* bingo_prefetch_candidates; // Queue of prefetch candidates based on pattern detection
-} Stream_HWP;
+void pref_bingo_init(HWP* hwp);
 
-/**************************************************************************************/
-/* Function Prototypes */
+void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr);
 
-/* Core prefetcher functions */
-void stream_dl0_miss(Addr line_addr);
-void stream_ul1_miss(Mem_Req* req);
-void update_pref_queue(void);
-void init_stream_HWP(void);
-int  train_create_stream_buffer(uns proc_id, Addr line_index, Flag train,
-                                Flag create);
-Flag train_stream_filter(Addr line_index);
-Flag pref_req_queue_filter(Addr line_addr);
+void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC,
+                            uns32 global_hist);
+void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC,
+                           uns32 global_hist);
+Addr pref_bingo_prefetch(Bingo_History_Table History_Table, , uns8 proc_id, Addr page_address);
 
-/* Bingo-specific functions */
-void bingo_dl0_miss(Addr line_addr); // Triggered on DL0 cache misses
-void bingo_pattern_detection(Addr line_addr, int delta); // Detect patterns based on deltas
-void bingo_prefetch(Addr line_addr, int predicted_delta); // Issue prefetch requests based on predicted deltas
-void update_delta_history(Addr line_addr, int delta); // Update the delta history for a given stream
+Bingo_History_Table pref_bingo_find_event_to_fetch(Bingo_History_Line line);
 
-/* Functions for handling L2 hits (optional, depending on Bingo prefetcher design) */
-void l2_hit_stream_pref(Addr line_addr, Flag hit);
-Flag train_l2hit_stream_filter(Addr line_index);
-void l2hit_stream_req(Addr line_index, Flag hit);
-int  train_l2hit_stream_buffer(Addr line_index, Flag hit);
-void stream_dl0_hit_train(Addr line_addr);
-
-#endif /*  __STREAM_PREF_H__ */
