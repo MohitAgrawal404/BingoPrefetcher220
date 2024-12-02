@@ -67,7 +67,7 @@ Hash_Table Aux_Storage;
 //   cache_invalidate    pref_ul1evict  pref_ul1evictOnPF
 
 
-void pref_bingo_init(HWP* hwp){
+void pref_bingo_init(HWP* hwp) {
   init_hash_table(&History_Table, "History Table", 32, sizeof(Bingo_Table_Line));
   init_hash_table(&Aux_Storage, "Auxiliary Storage", 64, sizeof(Aux_Entry));
 }
@@ -78,34 +78,39 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_
   //  add it to the Aux data and start recording 
   //  if already in the Aux then flip a bit in the bitmap (don't change anything else)
   //  continue
-  Addr block_address = lineAddr >> 64;
+  Addr block_address = lineAddr >> 6; 
   Addr pc_plus_offset = loadPC + block_address;
   Addr pc_plus_address = loadPC + lineAddr;
-  Addr page_address = lineAddr >> 4096;
+  Addr page_address = lineAddr >> 12;
 
 
-  Bingo_Table_Line line = hash_table_access(History_Table, pc_plus_offset);
-  Bingo_History_Table hash_entry =  pref_bingo_find_event_to_fetch_addr(line, pc_plus_address);
+  Bingo_Table_Line* line = hash_table_access(&History_Table, pc_plus_offset);
+  Bingo_History_Table* hash_entry = pref_bingo_find_event_to_fetch_addr(line, pc_plus_address);
+
   if (hash_entry == NULL){
     hash_entry =  pref_bingo_find_event_to_fetch(line, pc_plus_offset);
   }
-  Aux_Entry aux_entry = hash_table_access(Aux_Storage, page_address);
+  Aux_Entry* aux_entry = hash_table_access(&Aux_Storage, page_address);
 
-  int block = (block_address - page_address) / 64;
+  int block = (block_address & 0x3F);
+
   if (hash_entry){
     // Push the prefetch stuff
     pref_bingo_prefetch(hash_entry, proc_id, page_address);
     return;
   }
   else if (aux_entry){
-    aux_entry -> footprint -> accessed[block] = TRUE;
+    aux_entry->footprint.accessed[block] = TRUE;
   }
   else{
-    Aux_Entry aux_entry_temp = malloc(sizeof(Aux_Entry));
-    aux_entry_temp -> trigger_addr = lineAddr;
-    aux_entry_temp -> pc = loadPC;
-    aux_entry_temp -> footprint -> accessed[block] = TRUE;
-    hash_table_access_replace(Aux_Storage, page_address, aux_entry_temp);
+    Aux_Entry* aux_entry_temp = (Aux_Entry*)malloc(sizeof(Aux_Entry));
+    aux_entry_temp->trigger_addr = lineAddr;
+    aux_entry_temp->pc = loadPC;
+    memset(aux_entry_temp->footprint.accessed, 0, sizeof(aux_entry_temp->footprint.accessed));
+    aux_entry_temp->footprint.accessed[block] = TRUE;
+
+    // Store the new auxiliary entry in the hash table
+    hash_table_access_replace(&Aux_Storage, page_address, aux_entry_temp);
   }
 
 }
@@ -134,16 +139,15 @@ Bingo_History_Table* pref_bingo_find_event_to_fetch_addr(Bingo_Table_Line* table
 
 void pref_bingo_prefetch(Bingo_History_Table History_Entry, uns8 proc_id, Addr page_address){
   Addr temp_line_addr = 0;
-  for (int i = 0; i < 64; i ++){
+  for (int i = 0; i < 64; i++){
     if (History_Entry -> entry -> footprint -> accessed[i] == TRUE) {
       temp_line_addr = page_address + (64 * i); 
-      for (int i = 0; i < 64; i ++){
-        temp_line_addr = temp_line_addr + i;
-        pref_addto_ul1req_queue(proc_id, temp_line_addr, "Bingo");
+      for (int x = 0; x < 64; x++){
+        temp_line_addr = temp_line_addr + x;
+        pref_addto_ul1req_queue(proc_id, temp_line_addr, "bingo");
       }
     }
   }
-  return 
 }
 
 
