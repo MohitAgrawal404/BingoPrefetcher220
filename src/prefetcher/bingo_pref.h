@@ -39,7 +39,7 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC,
                             uns32 global_hist);
 void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC,
                            uns32 global_hist);
-Addr pref_bingo_prefetch(Bingo_History_Table History_Table, , uns8 proc_id, Addr page_address);
+void pref_bingo_prefetch(Bingo_History_Table History_Table, , uns8 proc_id, Addr page_address);
 
 Bingo_History_Table pref_bingo_find_event_to_fetch(Bingo_History_Line line);
 

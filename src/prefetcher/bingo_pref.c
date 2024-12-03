@@ -72,6 +72,54 @@ void pref_bingo_init(HWP* hwp) {
   init_hash_table(&Aux_Storage, "Auxiliary Storage", 64, sizeof(Aux_Entry));
 }
 
+void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_hist){
+  Addr block_address = lineAddr >> 6; 
+  Addr pc_plus_offset = loadPC + block_address;
+  Addr pc_plus_address = loadPC + lineAddr;
+  Addr page_address = lineAddr >> 12;
+
+  Bingo_Table_Line* line = hash_table_access(&History_Table, pc_plus_offset);
+  Bingo_History_Table* hash_entry = pref_bingo_find_event_to_fetch_addr(line, pc_plus_address);
+
+  if (hash_entry){
+    mark_used_by_address(&line, pc_plus_address)
+  }
+
+}
+
+void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr) {
+    Addr page_address = lineAddr >> 12;
+
+    // Access the auxiliary entry from the Aux_Storage table
+    Aux_Entry* aux_entry = hash_table_access(&Aux_Storage, page_address);
+    
+    // Check if the auxiliary entry exists
+    if (!aux_entry) {
+        // If the auxiliary entry doesn't exist, we can't evict, so just return
+        return;
+    }
+
+    Addr block_address = lineAddr >> 6;
+    Addr pc_plus_offset = aux_entry->pc + block_address;
+    Addr pc_plus_address = aux_entry->pc + lineAddr;
+
+    // Access the corresponding history table entry, or allocate if it doesn't exist
+    Bingo_History_Table* hist_entry = (Bingo_History_Table*)malloc(sizeof(Bingo_History_Table));
+    
+    // Populate the history table entry
+    hist_entry->pc_plus_address = pc_plus_address;
+    hist_entry->pc_plus_offset = pc_plus_offset;
+    hist_entry->entry = *aux_entry;  // Copy the aux_entry into the history table entry
+
+    // Replace the entry in the history table
+    hash_table_access_replace(&History_Table, pc_plus_offset, hist_entry);
+
+    // Now free the aux_entry from Aux_Storage since we no longer need it
+    hash_table_access_delete(&Aux_Storage, page_address);
+}
+
+
+
 
 void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_hist) {
   // On miss you will first check for if the address exists in the bingo, if not then
@@ -140,7 +188,7 @@ Bingo_History_Table* pref_bingo_find_event_to_fetch_addr(Bingo_Table_Line* table
 void pref_bingo_prefetch(Bingo_History_Table History_Entry, uns8 proc_id, Addr page_address){
   Addr temp_line_addr = 0;
   for (int i = 0; i < 64; i++){
-    if (History_Entry -> entry -> footprint -> accessed[i] == TRUE) {
+    if (History_Entry.entry.footprint.accessed[i] == TRUE) {
       temp_line_addr = page_address + (64 * i); 
       for (int x = 0; x < 64; x++){
         temp_line_addr = temp_line_addr + x;
