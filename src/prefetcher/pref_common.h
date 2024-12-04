@@ -31,7 +31,7 @@
 
 #include "memory/mem_req.h"
 
-#define PREF_TRACKERS_NUM 17
+#define PREF_TRACKERS_NUM 16
 
 // typedef in globals/global_types.h
 struct Pref_Mem_Req_struct {
