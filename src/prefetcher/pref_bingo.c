@@ -20,7 +20,7 @@
  */
 
 /***************************************************************************************
- * File         : bingo_pref.c
+ * File         : pref_bingo.c
  * Author       : HPS Research Group
  * Date         : 10/24/2002
  * Description  :
@@ -69,6 +69,7 @@ HWP_Info hwp_info;
 
 
 void pref_bingo_init(HWP* hwp) {
+  DEBUG("Your message, int: 0");
   if(!PREF_BINGO_ON)
     return;
   hwp->hwp_info->enabled = TRUE;
