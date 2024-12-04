@@ -142,7 +142,7 @@ void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr) {
       table_line->current_size = 0;
     }
 
-    add_entry(&table_line, hist_entry);
+    add_entry(table_line, *hist_entry);
 
 
     // Replace the entry in the history table
@@ -178,7 +178,7 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_
 
   if (hash_entry){
     // Push the prefetch stuff
-    pref_bingo_prefetch(&hash_entry, proc_id, page_address);
+    pref_bingo_prefetch(*hash_entry, proc_id, page_address);
     mark_used_by_address(line, pc_plus_address);
     return;
   }
@@ -224,10 +224,10 @@ void pref_bingo_prefetch(Bingo_History_Table History_Entry, uns8 proc_id, Addr p
   Addr temp_line_addr = 0;
   for (int i = 0; i < 64; i++) {
     if (History_Entry.entry.footprint.accessed[i] == TRUE) {
-        Addr temp_line_addr = page_address + (64 * i);  // Reset here
+        temp_line_addr = page_address + (64 * i);  // Reset here
         for (int x = 0; x < 64; x++) {
             Addr addr_to_prefetch = temp_line_addr + x;  // Use a new variable to avoid overwriting
-            uns8 bingo = "bingo";
+            uns8 bingo[] = {'b', 'i', 'n', 'g', 'o', '\0'};
             pref_addto_ul1req_queue(proc_id, addr_to_prefetch, bingo);
         }
     }

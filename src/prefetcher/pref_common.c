@@ -997,7 +997,7 @@ inline void pref_ul1evict(uns8 proc_id, Addr addr) {
     return;
 
   pref.num_ul1_evicted++;
-  for(ii = 0; ii < pref_table_size; ii++) {
+  for(int ii = 0; ii < pref_table_size; ii++) {
     if(pref_table[ii].hwp_info->enabled && pref_table[ii].ul1_cache_evict) {
       pref_table[ii].ul1_cache_evict(proc_id, addr);
     }
