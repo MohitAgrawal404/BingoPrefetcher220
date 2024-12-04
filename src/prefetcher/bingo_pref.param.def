@@ -50,7 +50,7 @@
 */
 
 DEF_PARAM(pref_bingo_on                , PREF_BINGO_ON              , Flag   , Flag      , FALSE       ,      ) 
-DEF_PARAM(debug_pref_bingo             , DEBUG_PREF_BINGO          , Flag   , Flag      , FALSE       ,      ) 
+DEF_PARAM(debug_pref_bingo             , DEBUG_PREF_BINGO          , Flag   , Flag      , TRUE       ,      ) 
 // // the size of the stridepc table
 // DEF_PARAM(pref_bingo_table_n           , PREF_BINGO_TABLE_N         , uns    , uns       , 1024        ,      ) 
 //      // Number of prefetches sent out on a miss/prefetch
