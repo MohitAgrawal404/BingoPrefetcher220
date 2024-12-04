@@ -58,7 +58,7 @@
 /**************************************************************************************/
 Hash_Table History_Table; 
 Hash_Table Aux_Storage; 
-HWP_Info* hwp_info = (HWP_Info*)malloc(sizeof(HWP_Info));
+HWP_Info hwp_info;
 
 // Method for detecting when a block is being accessed (will just be PC trigger)
 //   
@@ -68,10 +68,11 @@ HWP_Info* hwp_info = (HWP_Info*)malloc(sizeof(HWP_Info));
 
 
 void pref_bingo_init(HWP* hwp) {
+  hwp = (HWP_Info*)malloc(sizeof(HWP_Info));
   if(!PREF_BINGO_ON)
     return;
   hwp->hwp_info->enabled = TRUE;
-  hwp_info = hwp->hwp_info
+  hwp_info = hwp->hwp_info;
   init_hash_table(&History_Table, "History Table", 32, sizeof(Bingo_Table_Line));
   init_hash_table(&Aux_Storage, "Auxiliary Storage", 64, sizeof(Aux_Entry));
 }
