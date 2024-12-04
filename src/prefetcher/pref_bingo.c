@@ -47,9 +47,9 @@
 #include "memory/memory.param.h"
 #include "prefetcher/l2l1pref.h"
 #include "prefetcher/pref.param.h"
-#include "prefetcher//bingo_pref.param.h"
+#include "prefetcher//pref_bingo.param.h"
 #include "prefetcher/pref_common.h"
-#include "prefetcher//bingo_pref.h"
+#include "prefetcher//pref_bingo.h"
 #include "statistics.h"
 
 /**************************************************************************************/

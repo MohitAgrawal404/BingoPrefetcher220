@@ -29,7 +29,7 @@
 
 #define DEF_PARAM(name, variable, type, func, def, const) \
   extern const type variable;
-#include "bingo_pref.param.def"
+#include "pref_bingo.param.def"
 #undef DEF_PARAM
 
 /**************************************************************************************/

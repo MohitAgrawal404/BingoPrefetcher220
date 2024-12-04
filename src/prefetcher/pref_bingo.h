@@ -1,5 +1,5 @@
-#ifndef __BINGO_PREF_H__
-#define __BINGO_PREF_H__
+#ifndef __PREF_BINGO_H__
+#define __PREF_BINGO_H__
 
 #include "pref_common.h"
 #include <stdbool.h>
