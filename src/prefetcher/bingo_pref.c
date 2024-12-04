@@ -58,6 +58,7 @@
 /**************************************************************************************/
 Hash_Table History_Table; 
 Hash_Table Aux_Storage; 
+HWP_Info* hwp_info = (HWP_Info*)malloc(sizeof(HWP_Info));
 
 // Method for detecting when a block is being accessed (will just be PC trigger)
 //   
@@ -70,6 +71,7 @@ void pref_bingo_init(HWP* hwp) {
   if(!PREF_BINGO_ON)
     return;
   hwp->hwp_info->enabled = TRUE;
+  hwp_info = hwp->hwp_info
   init_hash_table(&History_Table, "History Table", 32, sizeof(Bingo_Table_Line));
   init_hash_table(&Aux_Storage, "Auxiliary Storage", 64, sizeof(Aux_Entry));
 }
@@ -227,8 +229,8 @@ void pref_bingo_prefetch(Bingo_History_Table History_Entry, uns8 proc_id, Addr p
         temp_line_addr = page_address + (64 * i);  // Reset here
         for (int x = 0; x < 64; x++) {
             Addr addr_to_prefetch = temp_line_addr + x;  // Use a new variable to avoid overwriting
-            uns8 bingo[] = {'b', 'i', 'n', 'g', 'o', '\0'};
-            pref_addto_ul1req_queue(proc_id, addr_to_prefetch, *bingo);
+            //uns8 bingo[] = {'b', 'i', 'n', 'g', 'o', '\0'};
+            pref_addto_ul1req_queue(proc_id, addr_to_prefetch, hwp_info->id);
         }
     }
   }
