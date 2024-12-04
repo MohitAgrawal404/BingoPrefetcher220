@@ -68,11 +68,10 @@ HWP_Info hwp_info;
 
 
 void pref_bingo_init(HWP* hwp) {
-  hwp = (HWP_Info*)malloc(sizeof(HWP_Info));
   if(!PREF_BINGO_ON)
     return;
   hwp->hwp_info->enabled = TRUE;
-  hwp_info = hwp->hwp_info;
+  hwp_info = *(hwp->hwp_info);
   init_hash_table(&History_Table, "History Table", 32, sizeof(Bingo_Table_Line));
   init_hash_table(&Aux_Storage, "Auxiliary Storage", 64, sizeof(Aux_Entry));
 }
