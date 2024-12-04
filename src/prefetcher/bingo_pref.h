@@ -2,6 +2,7 @@
 #define __BINGO_PREF_H__
 
 #include "pref_common.h"
+#include <stdbool.h>
 
 
 typedef struct Footprint_struct {
@@ -39,7 +40,6 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC,
                             uns32 global_hist);
 void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC,
                            uns32 global_hist);
-void pref_bingo_prefetch(Bingo_History_Table History_Table, , uns8 proc_id, Addr page_address);
 
 Bingo_History_Table* pref_bingo_find_event_to_fetch(Bingo_Table_Line* table_line, Addr pc_plus_offset);
 
@@ -52,4 +52,4 @@ void add_entry(Bingo_Table_Line* table_line, Bingo_History_Table new_entry);
 void mark_used_by_address(Bingo_Table_Line* table_line, Addr pc_plus_address);
 
 
-
+#endif

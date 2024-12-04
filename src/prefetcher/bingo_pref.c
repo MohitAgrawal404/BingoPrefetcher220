@@ -135,8 +135,18 @@ void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr) {
     hist_entry->pc_plus_offset = pc_plus_offset;
     hist_entry->entry = *aux_entry;  // Copy the aux_entry into the history table entry
 
+    Bingo_Table_Line* table_line = hash_table_access(&History_Table, pc_plus_offset);
+
+    if (table_line == NULL){
+      table_line = (Bingo_Table_Line*)malloc(sizeof(Bingo_Table_Line));
+      table_line->current_size = 0;
+    }
+
+    add_entry(&table_line, hist_entry);
+
+
     // Replace the entry in the history table
-    hash_table_access_replace(&History_Table, pc_plus_offset, hist_entry);
+    hash_table_access_replace(&History_Table, pc_plus_offset, &table_line);
 
     // Now free the aux_entry from Aux_Storage since we no longer need it
     hash_table_access_delete(&Aux_Storage, page_address);
@@ -168,7 +178,8 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_
 
   if (hash_entry){
     // Push the prefetch stuff
-    pref_bingo_prefetch(hash_entry, proc_id, page_address);
+    pref_bingo_prefetch(&hash_entry, proc_id, page_address);
+    mark_used_by_address(line, pc_plus_address);
     return;
   }
   else if (aux_entry){
@@ -211,13 +222,14 @@ Bingo_History_Table* pref_bingo_find_event_to_fetch_addr(Bingo_Table_Line* table
 
 void pref_bingo_prefetch(Bingo_History_Table History_Entry, uns8 proc_id, Addr page_address){
   Addr temp_line_addr = 0;
-  for (int i = 0; i < 64; i++){
+  for (int i = 0; i < 64; i++) {
     if (History_Entry.entry.footprint.accessed[i] == TRUE) {
-      temp_line_addr = page_address + (64 * i); 
-      for (int x = 0; x < 64; x++){
-        temp_line_addr = temp_line_addr + x;
-        pref_addto_ul1req_queue(proc_id, temp_line_addr, "bingo");
-      }
+        Addr temp_line_addr = page_address + (64 * i);  // Reset here
+        for (int x = 0; x < 64; x++) {
+            Addr addr_to_prefetch = temp_line_addr + x;  // Use a new variable to avoid overwriting
+            uns8 bingo = "bingo";
+            pref_addto_ul1req_queue(proc_id, addr_to_prefetch, bingo);
+        }
     }
   }
 }
