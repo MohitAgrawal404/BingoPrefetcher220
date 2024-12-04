@@ -47,14 +47,14 @@
 #include "memory/memory.param.h"
 #include "prefetcher/l2l1pref.h"
 #include "prefetcher/pref.param.h"
-#include "prefetcher/bingo_pref.param.h"
+#include "prefetcher//bingo_pref.param.h"
 #include "prefetcher/pref_common.h"
-#include "prefetcher/bingo_pref.h"
+#include "prefetcher//bingo_pref.h"
 #include "statistics.h"
 
 /**************************************************************************************/
 /* Macros */
-#define DEBUG(args...) _DEBUG(DEBUG_PREF_Bingo, ##args)
+#define DEBUG(args...) _DEBUG(DEBUG_PREF_BINGO, ##args)
 
 /**************************************************************************************/
 Hash_Table History_Table; 
