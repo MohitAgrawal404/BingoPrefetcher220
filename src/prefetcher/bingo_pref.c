@@ -230,7 +230,7 @@ void pref_bingo_prefetch(Bingo_History_Table History_Entry, uns8 proc_id, Addr p
         for (int x = 0; x < 64; x++) {
             Addr addr_to_prefetch = temp_line_addr + x;  // Use a new variable to avoid overwriting
             //uns8 bingo[] = {'b', 'i', 'n', 'g', 'o', '\0'};
-            pref_addto_ul1req_queue(proc_id, addr_to_prefetch, hwp_info->id);
+            pref_addto_ul1req_queue(proc_id, addr_to_prefetch, hwp_info.id);
         }
     }
   }
