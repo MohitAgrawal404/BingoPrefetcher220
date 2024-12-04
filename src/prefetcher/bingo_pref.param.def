@@ -51,14 +51,14 @@
 
 DEF_PARAM(pref_bingo_on                , PREF_BINGO_ON              , Flag   , Flag      , FALSE       ,      ) 
 DEF_PARAM(debug_pref_bingo             , DEBUG_PREF_BINGO          , Flag   , Flag      , FALSE       ,      ) 
-// the size of the stridepc table
-DEF_PARAM(pref_bingo_table_n           , PREF_BINGO_TABLE_N         , uns    , uns       , 1024        ,      ) 
-     // Number of prefetches sent out on a miss/prefetch
-DEF_PARAM(pref_bingo_degree            , PREF_BINGO_DEGREE          , uns    , uns       , 4           ,      ) 
-DEF_PARAM(pref_bingo_distance          , PREF_BINGO_DISTANCE        , uns    , uns       , 16          ,      ) 
-     // Useloadaddr -> Do we stride based on load address
-DEF_PARAM(pref_bingo_useloadaddr       , PREF_BINGO_USELOADADDR     , Flag   , Flag      , FALSE       ,      ) 
+// // the size of the stridepc table
+// DEF_PARAM(pref_bingo_table_n           , PREF_BINGO_TABLE_N         , uns    , uns       , 1024        ,      ) 
+//      // Number of prefetches sent out on a miss/prefetch
+// DEF_PARAM(pref_bingo_degree            , PREF_BINGO_DEGREE          , uns    , uns       , 4           ,      ) 
+// DEF_PARAM(pref_bingo_distance          , PREF_BINGO_DISTANCE        , uns    , uns       , 16          ,      ) 
+//      // Useloadaddr -> Do we stride based on load address
+// DEF_PARAM(pref_bingo_useloadaddr       , PREF_BINGO_USELOADADDR     , Flag   , Flag      , FALSE       ,      ) 
 
-DEF_PARAM(pref_bingo_trainnum          , PREF_BINGO_TRAINNUM        , uns    , uns       , 2           ,      ) 
+// DEF_PARAM(pref_bingo_trainnum          , PREF_BINGO_TRAINNUM        , uns    , uns       , 2           ,      ) 
 
-DEF_PARAM(pref_bingo_startdis          , PREF_BINGO_STARTDIS        , uns    , uns       , 4           ,      ) 
+// DEF_PARAM(pref_bingo_startdis          , PREF_BINGO_STARTDIS        , uns    , uns       , 4           ,      ) 

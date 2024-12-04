@@ -51,6 +51,8 @@
 #include "prefetcher//pref_stream.h"
 #include "prefetcher//pref_stride.h"
 #include "prefetcher//pref_stridepc.h"
+#include "prefetcher//bingo_pref.param.h"
+#include "prefetcher//bingo_pref.h"
 #include "prefetcher//stream.param.h"
 #include "prefetcher/l2l1pref.h"
 #include "prefetcher/pref.param.h"

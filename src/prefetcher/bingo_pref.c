@@ -20,7 +20,7 @@
  */
 
 /***************************************************************************************
- * File         : stream_pref.c
+ * File         : bingo_pref.c
  * Author       : HPS Research Group
  * Date         : 10/24/2002
  * Description  :
@@ -47,7 +47,6 @@
 #include "memory/memory.param.h"
 #include "prefetcher//bingo_pref.h"
 #include "prefetcher//bingo_pref.param.h"
-#include "prefetcher/l2l1pref.h"
 #include "prefetcher/pref_common.h"
 #include "prefetcher/bingo_pref.h"
 #include "statistics.h"
@@ -68,21 +67,46 @@ Hash_Table Aux_Storage;
 
 
 void pref_bingo_init(HWP* hwp) {
+  if(!PREF_BINGO_ON)
+    return;
+  hwp->hwp_info->enabled = TRUE;
   init_hash_table(&History_Table, "History Table", 32, sizeof(Bingo_Table_Line));
   init_hash_table(&Aux_Storage, "Auxiliary Storage", 64, sizeof(Aux_Entry));
 }
 
 void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_hist){
+    // On miss you will first check for if the address exists in the bingo, if not then
+  //  add it to the Aux data and start recording 
+  //  if already in the Aux then flip a bit in the bitmap (don't change anything else)
+  //  continue
   Addr block_address = lineAddr >> 6; 
   Addr pc_plus_offset = loadPC + block_address;
   Addr pc_plus_address = loadPC + lineAddr;
   Addr page_address = lineAddr >> 12;
 
+
   Bingo_Table_Line* line = hash_table_access(&History_Table, pc_plus_offset);
   Bingo_History_Table* hash_entry = pref_bingo_find_event_to_fetch_addr(line, pc_plus_address);
 
-  if (hash_entry){
-    mark_used_by_address(&line, pc_plus_address)
+  if (hash_entry == NULL){
+    hash_entry =  pref_bingo_find_event_to_fetch(line, pc_plus_offset);
+  }
+  int block = (block_address & 0x3F);
+  if (hash_entry == NULL){
+    Aux_Entry* aux_entry = hash_table_access(&Aux_Storage, page_address);
+    if (aux_entry){
+      aux_entry->footprint.accessed[block] = TRUE;
+    }
+    else{
+      Aux_Entry* aux_entry_temp = (Aux_Entry*)malloc(sizeof(Aux_Entry));
+      aux_entry_temp->trigger_addr = lineAddr;
+      aux_entry_temp->pc = loadPC;
+      memset(aux_entry_temp->footprint.accessed, 0, sizeof(aux_entry_temp->footprint.accessed));
+      aux_entry_temp->footprint.accessed[block] = TRUE;
+
+      // Store the new auxiliary entry in the aux table
+      hash_table_access_replace(&Aux_Storage, page_address, aux_entry_temp);
+    }
   }
 
 }
@@ -166,20 +190,20 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_
 // Finds the most recently used entry with a matching pc_plus_offset
 Bingo_History_Table* pref_bingo_find_event_to_fetch(Bingo_Table_Line* table_line, Addr pc_plus_offset) {
     for (int i = 0; i < table_line->current_size; i++) {
-        int index = table_line->usage_order[i];
-        if (table_line->line[index].pc_plus_offset == pc_plus_offset) {
-            return &table_line->line[index];
-        }
+      int index = table_line->usage_order[i];
+      if (table_line->line[index].pc_plus_offset == pc_plus_offset) {
+          return &table_line->line[index];
+      }
     }
     return NULL;  // Not found
 }
 
 Bingo_History_Table* pref_bingo_find_event_to_fetch_addr(Bingo_Table_Line* table_line, Addr pc_plus_address) {
     for (int i = 0; i < table_line->current_size; i++) {
-        int index = table_line->usage_order[i];
-        if (table_line->line[index].pc_plus_address == pc_plus_address) {
-            return &table_line->line[index];
-        }
+      int index = table_line->usage_order[i];
+      if (table_line->line[index].pc_plus_address == pc_plus_address) {
+          return &table_line->line[index];
+      }
     }
     return NULL;  // Not found
 }
