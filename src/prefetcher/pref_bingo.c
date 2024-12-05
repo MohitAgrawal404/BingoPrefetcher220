@@ -37,19 +37,16 @@
 #include "op.h"
 
 #include "core.param.h"
-#include "dcache_stage.h"
 #include "debug/debug.param.h"
 #include "general.param.h"
 #include "libs/cache_lib.h"
 #include "libs/hash_lib.h"
 #include "libs/list_lib.h"
-#include "memory/memory.h"
 #include "memory/memory.param.h"
-#include "prefetcher/l2l1pref.h"
-#include "prefetcher/pref.param.h"
-#include "prefetcher//pref_bingo.param.h"
-#include "prefetcher/pref_common.h"
 #include "prefetcher//pref_bingo.h"
+#include "prefetcher//pref_bingo.param.h"
+#include "prefetcher/pref.param.h"
+#include "prefetcher/pref_common.h"
 #include "statistics.h"
 
 /**************************************************************************************/
@@ -69,7 +66,8 @@ HWP_Info hwp_info;
 
 
 void pref_bingo_init(HWP* hwp) {
-  DEBUG("Your message, int: 0");
+  DEBUG("Your message, int: 0\n");
+  printf("im hereeee\n");
   if(!PREF_BINGO_ON)
     return;
   hwp->hwp_info->enabled = TRUE;
