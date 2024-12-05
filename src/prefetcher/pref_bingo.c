@@ -99,7 +99,6 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   int block_index = page_offset / 64;
   if (hash_entry == NULL){
     Aux_Entry* aux_entry = NULL;
-    return;
     aux_entry = hash_table_access(&Aux_Storage, page_address);
     return;
     if (aux_entry){
