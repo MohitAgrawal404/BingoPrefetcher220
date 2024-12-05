@@ -61,22 +61,27 @@
 /**************************************************************************************/
 /* Macros */
 #define DEBUG(args...) _DEBUG(DEBUG_PREF_STRIDEPC, ##args)
-Hash_Table History_Table; 
-Hash_Table Aux_Storage; 
-HWP_Info hwp_info;
 
 stridepc_prefetchers stridepc_prefetche_array;
 
 void pref_stridepc_init(HWP* hwp) {
-   printf("im hereeeebingostride\n");
-  //DEBUG("Your message, int: 0\n");
-  printf("im hereeee\n");
+
   if(!PREF_STRIDEPC_ON)
     return;
   hwp->hwp_info->enabled = TRUE;
-  hwp_info = *(hwp->hwp_info);
-  // init_hash_table(&History_Table, "History Table", 32, sizeof(Bingo_Table_Line));
-  // init_hash_table(&Aux_Storage, "Auxiliary Storage", 64, sizeof(Aux_Entry));
+
+  if(PREF_UMLC_ON){
+    stridepc_prefetche_array.stridepc_hwp_core_umlc        = (Pref_StridePC*)malloc(sizeof(Pref_StridePC) * NUM_CORES);
+    stridepc_prefetche_array.stridepc_hwp_core_umlc->type  = UMLC;
+    init_stridepc(hwp, stridepc_prefetche_array.stridepc_hwp_core_umlc);
+  }
+  if(PREF_UL1_ON){
+    stridepc_prefetche_array.stridepc_hwp_core_ul1        = (Pref_StridePC*)malloc(sizeof(Pref_StridePC) * NUM_CORES);
+    stridepc_prefetche_array.stridepc_hwp_core_ul1->type  = UL1;
+    init_stridepc(hwp, stridepc_prefetche_array.stridepc_hwp_core_ul1);
+  }
+
+
 
 }
 
