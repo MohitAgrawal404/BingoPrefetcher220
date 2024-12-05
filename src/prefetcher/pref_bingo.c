@@ -83,8 +83,7 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   //  add it to the Aux data and start recording 
   //  if already in the Aux then flip a bit in the bitmap (don't change anything else)
   //  continue
-  printf("hit");
-  return;
+  //printf("hit");
   Addr block_address = lineAddr >> 6; 
   Addr pc_plus_offset = loadPC + block_address;
   Addr pc_plus_address = loadPC + lineAddr;
@@ -118,7 +117,7 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
 }
 
 void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr) {
-    printf("evict");
+    //printf("evict");
     return;
     Addr page_address = lineAddr >> 12;
 
@@ -168,8 +167,8 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_
   //  add it to the Aux data and start recording 
   //  if already in the Aux then flip a bit in the bitmap (don't change anything else)
   //  continue
-      printf("miss");
-    return;
+  
+  return;
   Addr block_address = lineAddr >> 6; 
   Addr pc_plus_offset = loadPC + block_address;
   Addr pc_plus_address = loadPC + lineAddr;
