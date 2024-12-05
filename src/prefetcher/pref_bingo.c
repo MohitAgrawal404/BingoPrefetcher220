@@ -89,7 +89,6 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   Addr pc_plus_address = loadPC + lineAddr;
   Addr page_address = lineAddr >> 12;
 
-  return;
   Bingo_Table_Line* line = hash_table_access(&History_Table, pc_plus_offset);
   return;
   Bingo_History_Table* hash_entry = pref_bingo_find_event_to_fetch_addr(line, pc_plus_address);
