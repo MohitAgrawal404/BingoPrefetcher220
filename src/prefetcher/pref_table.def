@@ -87,7 +87,7 @@ HWP pref_table [] = {
                   NULL,
 	 	  NULL,  		NULL,         		NULL,
           NULL,        		NULL,  	NULL,   		
-	    pref_bingo_ul1_miss, 		NULL,    pref_bingo_ul1_hit,   pref_bingo_ul1_cache_evict },
+	    pref_bingo_ul1_miss, 		pref_bingo_ul1_hit,    NULL,   pref_bingo_ul1_cache_evict },
 
     { NULL,       PREF_TO_UL1,  		NULL,   		NULL,    		NULL,
                   NULL,
