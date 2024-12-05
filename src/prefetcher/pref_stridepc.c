@@ -65,7 +65,7 @@
 stridepc_prefetchers stridepc_prefetche_array;
 
 void pref_stridepc_init(HWP* hwp) {
-
+  printf("im hereeee\n");
   if(!PREF_STRIDEPC_ON)
     return;
   hwp->hwp_info->enabled = TRUE;
