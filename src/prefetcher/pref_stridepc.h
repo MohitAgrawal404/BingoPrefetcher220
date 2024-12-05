@@ -29,7 +29,7 @@
 #define __PREF_STRIDEPC_H__
 
 #include "pref_common.h"
-#include <stdbool.h>
+
 
 typedef struct StridePC_Table_Entry_Struct {
   Flag trained;
@@ -78,33 +78,5 @@ void pref_stridepc_train(Pref_StridePC* stridepc_hwp, uns8 proc_id, Addr lineAdd
                              Flag is_hit);
 /*************************************************************/
 /* Misc functions */
-
-typedef struct Footprint_struct {
-    bool accessed[64];  // Size of page devided by block size
-                        // 4096/64
-} Footprint;
-
-typedef struct Aux_Entry_Struct {
-  Footprint    footprint; // Bit vector for accessed blocks
-  Addr      trigger_addr; // The address that triggered this entry
-  Addr      pc;           // The PC of the trigger instruction
-} Aux_Entry;
-
-// This will be put into a dictionary with key as Page address
-
-
-typedef struct Bingo_History_Table_Struct {
-  // table hashed by PC + Offset and each entry is PC+Address, footprint
-  Addr      pc_plus_address;
-  Addr      pc_plus_offset;
-  Aux_Entry entry; // Holds the original data from the Aux data  
-} Bingo_History_Table; // this is one entry in the Bingo table will also be in a dictionary
-
-typedef struct Bingo_Table_Line_Struct {
-    Bingo_History_Table line[16];  // The entries
-    int usage_order[16];           // Tracks the order of usage for LRU
-    int current_size;              // Keeps track of the number of valid entries in the line
-} Bingo_Table_Line;
-
 
 #endif /*  __PREF_STRIDEPC_H__*/
