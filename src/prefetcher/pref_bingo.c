@@ -56,7 +56,7 @@
 /**************************************************************************************/
 Hash_Table History_Table; 
 Hash_Table Aux_Storage; 
-HWP_Info hwp_info;
+HWP_Info hwp_in;
 
 // Method for detecting when a block is being accessed (will just be PC trigger)
 //   
@@ -71,8 +71,9 @@ void pref_bingo_init(HWP* hwp) {
   printf("im hereeee\n");
   if(!PREF_BINGO_ON)
     return;
+  return;
   hwp->hwp_info->enabled = TRUE;
-  hwp_info = *(hwp->hwp_info);
+  hwp_in = *(hwp->hwp_info);
   init_hash_table(&History_Table, "History Table", 32, sizeof(Bingo_Table_Line));
   init_hash_table(&Aux_Storage, "Auxiliary Storage", 64, sizeof(Aux_Entry));
 }
@@ -82,6 +83,8 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   //  add it to the Aux data and start recording 
   //  if already in the Aux then flip a bit in the bitmap (don't change anything else)
   //  continue
+  printf("hit");
+  return;
   Addr block_address = lineAddr >> 6; 
   Addr pc_plus_offset = loadPC + block_address;
   Addr pc_plus_address = loadPC + lineAddr;
@@ -115,6 +118,8 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
 }
 
 void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr) {
+    printf("evict");
+    return
     Addr page_address = lineAddr >> 12;
 
     // Access the auxiliary entry from the Aux_Storage table
@@ -163,6 +168,8 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_
   //  add it to the Aux data and start recording 
   //  if already in the Aux then flip a bit in the bitmap (don't change anything else)
   //  continue
+      printf("miss");
+    return
   Addr block_address = lineAddr >> 6; 
   Addr pc_plus_offset = loadPC + block_address;
   Addr pc_plus_address = loadPC + lineAddr;
@@ -231,7 +238,7 @@ void pref_bingo_prefetch(Bingo_History_Table History_Entry, uns8 proc_id, Addr p
         for (int x = 0; x < 64; x++) {
             Addr addr_to_prefetch = temp_line_addr + x;  // Use a new variable to avoid overwriting
             //uns8 bingo[] = {'b', 'i', 'n', 'g', 'o', '\0'};
-            pref_addto_ul1req_queue(proc_id, addr_to_prefetch, hwp_info.id);
+            pref_addto_ul1req_queue(proc_id, addr_to_prefetch, hwp_in.id);
         }
     }
   }
