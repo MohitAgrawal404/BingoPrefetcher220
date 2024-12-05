@@ -96,10 +96,9 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
     hash_entry =  pref_bingo_find_event_to_fetch(line, pc_plus_offset);
   }
   int block_index = page_offset / 64;
-  printf("block %d\n", block_index);
   if (hash_entry == NULL){
-    return;
     Aux_Entry* aux_entry = hash_table_access(&Aux_Storage, page_address);
+    return;
     if (aux_entry){
       aux_entry->footprint.accessed[block_index] = TRUE;
        return;
