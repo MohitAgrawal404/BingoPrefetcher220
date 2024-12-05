@@ -95,7 +95,7 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   hash_entry = pref_bingo_find_event_to_fetch_addr(line, pc_plus_address);
   if (hash_entry == NULL){
     hash_entry =  pref_bingo_find_event_to_fetch(line, pc_plus_offset);
-    printf("Pointer address: %p\n", (void*)hash_entry);
+    printf("gang");
   }
   int block_index = page_offset / 64;
   return;
