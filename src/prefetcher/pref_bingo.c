@@ -67,7 +67,7 @@ HWP_Info hwp_info;
 
 void pref_bingo_init(HWP* hwp) {
   printf("im hereeee\n");
-  DEBUG("Your message, int: 0\n");
+  //DEBUG("Your message, int: 0\n");
   printf("im hereeee\n");
   if(!PREF_BINGO_ON)
     return;
