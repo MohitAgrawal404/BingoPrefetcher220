@@ -96,8 +96,8 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   }
   int block = (block_address & 0x3F);
   if (hash_entry == NULL){
-    Aux_Entry* aux_entry = hash_table_access(&Aux_Storage, page_address);
      return;
+    Aux_Entry* aux_entry = hash_table_access(&Aux_Storage, page_address);
     if (aux_entry){
       aux_entry->footprint.accessed[block] = TRUE;
        return;
