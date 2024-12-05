@@ -96,6 +96,7 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
     hash_entry =  pref_bingo_find_event_to_fetch(line, pc_plus_offset);
   }
   int block_index = page_offset / 64;
+  return;
   if (hash_entry == NULL){
     //print page_address and pc+offset
     printf("pc_offset: %llu\n", (unsigned long long)pc_plus_offset);
