@@ -94,6 +94,8 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   if (hash_entry == NULL){
     hash_entry =  pref_bingo_find_event_to_fetch(line, pc_plus_offset);
   }
+  printf("block %llu\n", (unsigned long long)block_address);
+  return;
   int block = (block_address & 0x3F);
   if (hash_entry == NULL){
     printf("block %d\n", block);
