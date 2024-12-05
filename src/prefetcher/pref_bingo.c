@@ -95,16 +95,11 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   hash_entry = pref_bingo_find_event_to_fetch_addr(line, pc_plus_address);
   if (hash_entry == NULL){
     hash_entry =  pref_bingo_find_event_to_fetch(line, pc_plus_offset);
-    printf("lineAddr: %llu\n", (unsigned long long)pc_plus_offset);
   }
   int block_index = page_offset / 64;
+  printf("hola\n");
   return;
   if (hash_entry == NULL){
-    printf("lineAddr: %llu\n", (unsigned long long)lineAddr);
-
-    //printf("lineaddress: %llu\n", (unsigned long long)lineAddr);
-    //printf("page address: %llu\n", (unsigned long long)page_address);
-
     return;
     Aux_Entry* aux_entry = hash_table_access(&Aux_Storage, page_address);
     return;
