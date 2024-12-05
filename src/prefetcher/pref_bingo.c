@@ -71,11 +71,11 @@ void pref_bingo_init(HWP* hwp) {
   printf("im hereeee\n");
   if(!PREF_BINGO_ON)
     return;
-  return;
   hwp->hwp_info->enabled = TRUE;
   hwp_in = *(hwp->hwp_info);
   init_hash_table(&History_Table, "History Table", 32, sizeof(Bingo_Table_Line));
   init_hash_table(&Aux_Storage, "Auxiliary Storage", 64, sizeof(Aux_Entry));
+  return;
 }
 
 void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_hist){
