@@ -98,9 +98,9 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   int block_index = page_offset / 64;
   if (hash_entry == NULL){
     //print page_address and pc+offset
-    printf("pc_offset: %lx\n", (unsigned long)pc_plus_offset);
-    printf("lineaddress: %lx\n", (unsigned long)lineAddr);
-    //printf("page address: %lx\n", (unsigned long)page_address);
+    printf("pc_offset: %llu\n", (unsigned long long)pc_plus_offset);
+    printf("lineaddress: %llu\n", (unsigned long long)lineAddr);
+    printf("page address: %llu\n", (unsigned long long)page_address);
 
     return;
     Aux_Entry* aux_entry = hash_table_access(&Aux_Storage, page_address);
