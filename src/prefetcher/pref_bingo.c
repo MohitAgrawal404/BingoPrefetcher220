@@ -99,6 +99,8 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   if (hash_entry == NULL){
     //print page_address and pc+offset
     //printf("pc_offset: %llu\n", (unsigned long long)pc_plus_offset);
+    print("henlo\n");
+    return;
     printf("lineAddr: %llu\n", (unsigned long long)lineAddr);
 
     //printf("lineaddress: %llu\n", (unsigned long long)lineAddr);
