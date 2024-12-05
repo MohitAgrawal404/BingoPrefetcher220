@@ -29,6 +29,7 @@
 #define __PREF_STRIDEPC_H__
 
 #include "pref_common.h"
+#include <stdbool.h>
 
 typedef struct StridePC_Table_Entry_Struct {
   Flag trained;
