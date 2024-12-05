@@ -90,17 +90,20 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   Addr page_address = lineAddr >> 12;
 
   Bingo_Table_Line* line = hash_table_access(&History_Table, pc_plus_offset);
-  return;
   Bingo_History_Table* hash_entry = pref_bingo_find_event_to_fetch_addr(line, pc_plus_address);
-
+   return;
   if (hash_entry == NULL){
     hash_entry =  pref_bingo_find_event_to_fetch(line, pc_plus_offset);
+     return;
   }
   int block = (block_address & 0x3F);
   if (hash_entry == NULL){
     Aux_Entry* aux_entry = hash_table_access(&Aux_Storage, page_address);
+     return;
     if (aux_entry){
+       return;
       aux_entry->footprint.accessed[block] = TRUE;
+       return;
     }
     else{
       Aux_Entry* aux_entry_temp = (Aux_Entry*)malloc(sizeof(Aux_Entry));
