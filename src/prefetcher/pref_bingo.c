@@ -89,7 +89,7 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   Addr pc_plus_address = loadPC + lineAddr;
   Addr page_address = lineAddr >> 12;
   Addr page_offset = lineAddr & (4096 - 1);
-
+  int block_index = page_offset / 64
   Bingo_Table_Line* line = hash_table_access(&History_Table, pc_plus_offset);
   if (line == NULL){
     Aux_Entry* aux_entry = NULL;
@@ -114,7 +114,6 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   if (hash_entry == NULL){
     hash_entry =  pref_bingo_find_event_to_fetch(line, pc_plus_offset);
   }
-  int block_index = page_offset / 64;
   if (hash_entry == NULL){
     Aux_Entry* aux_entry = NULL;
     aux_entry = hash_table_access(&Aux_Storage, page_address);
