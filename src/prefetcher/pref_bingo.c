@@ -127,7 +127,7 @@ void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr) {
     Aux_Entry* aux_entry = hash_table_access(&Aux_Storage, page_address);
     
     // Check if the auxiliary entry exists
-    if (!aux_entry) {
+    if (aux_entry == NULL) {
         // If the auxiliary entry doesn't exist, we can't evict, so just return
         return;
     }
