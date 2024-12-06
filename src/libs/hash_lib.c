@@ -45,14 +45,14 @@
 
 int64 HASH_INDEX(const Hash_Table* table, int64 key);
 int64 HASH_INDEX(const Hash_Table*  table, int64 key) {
-    int64 hash = 14695981039346656037UL;  // FNV-1a offset basis (kept for simplicity)
-    int64 prime = 1099511628211UL;  // FNV-1a prime multiplier (kept for simplicity)
+    int64 hash = 14695981039346656037UL;  // FNV-1a offset basis
+    int64 prime = 1099511628211UL;  // FNV-1a prime multiplier
 
     // Process each byte of the key (64 bits = 8 bytes)
     for (int i = 0; i < 8; ++i) {
         hash ^= (key & 0xFF);  // XOR the current byte
         hash *= prime;  // Multiply by FNV prime
-        key >>= 8;  // Move to the next byte
+        key = (key >> 8) | (key << (64 - 8));  // Bitwise rotation
     }
 
     // Additional mixing step (improve bit spread)
