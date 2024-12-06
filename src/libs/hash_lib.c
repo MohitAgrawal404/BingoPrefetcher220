@@ -45,15 +45,25 @@
 
 int64 HASH_INDEX(const Hash_Table* table, int64 key);
 int64 HASH_INDEX(const Hash_Table*  table, int64 key) {
-  int64_t mask = table->buckets - 1;  // Ensuring the mask is within the bucket size
-  int64 hash = 14695981039346656037UL;  // FNV-1a offset basis
-  for (int i = 0; i < 64; i += 8) {
-      // Process 8 bits at a time
-      hash ^= (key & 0xFF);  // XOR the current byte of the key
-      hash *= 1099511628211UL;  // FNV prime multiplier
-      key >>= 8;  // Move to the next byte
-  }
-  return hash & mask;
+    int64 hash = 14695981039346656037UL;  // FNV-1a offset basis (kept for simplicity)
+    int64 prime = 1099511628211UL;  // FNV-1a prime multiplier (kept for simplicity)
+
+    // Process each byte of the key (64 bits = 8 bytes)
+    for (int i = 0; i < 8; ++i) {
+        hash ^= (key & 0xFF);  // XOR the current byte
+        hash *= prime;  // Multiply by FNV prime
+        key >>= 8;  // Move to the next byte
+    }
+
+    // Additional mixing step (improve bit spread)
+    hash ^= (hash >> 33);
+    hash *= 0xff51afd7ed558ccdULL;  // Prime number multiplier for extra randomness
+    hash ^= (hash >> 33);
+    hash *= 0xc4ceb9fe1a85ec53ULL;  // Another prime multiplier
+    hash ^= (hash >> 33);
+
+    // Ensure the hash value maps to a valid bucket within the table's size
+    return hash % table->buckets;
 }
 
 /**************************************************************************************/
