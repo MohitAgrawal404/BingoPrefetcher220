@@ -190,13 +190,33 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_
   //  if already in the Aux then flip a bit in the bitmap (don't change anything else)
   //  continue
   
-  Addr block_address = lineAddr >> 6; 
+  Addr block_address = (lineAddr >> 6) << 6; // Clear the lower 6 bits 
   Addr pc_plus_offset = loadPC + block_address;
   Addr pc_plus_address = loadPC + lineAddr;
   Addr page_address = lineAddr >> 12;
+  Addr page_offset = lineAddr & (4096 - 1);
+  int block_index = page_offset / 64;
 
 
   Bingo_Table_Line* line = hash_table_access(&History_Table, pc_plus_offset);
+  if (line == NULL){
+    Aux_Entry* aux_entry = NULL;
+    aux_entry = hash_table_access(&Aux_Storage, page_address);
+    if (aux_entry){
+      aux_entry->footprint.accessed[block_index] = TRUE;
+    }
+    else{
+      Aux_Entry* aux_entry_temp = (Aux_Entry*)malloc(sizeof(Aux_Entry));
+      aux_entry_temp->trigger_addr = lineAddr;
+      aux_entry_temp->pc = loadPC;
+      memset(aux_entry_temp->footprint.accessed, 0, sizeof(aux_entry_temp->footprint.accessed));
+      aux_entry_temp->footprint.accessed[block_index] = TRUE;
+
+      // Store the new auxiliary entry in the aux table
+      hash_table_access_replace(&Aux_Storage, page_address, aux_entry_temp);
+    }
+    return;
+  }
   Bingo_History_Table* hash_entry = pref_bingo_find_event_to_fetch_addr(line, pc_plus_address);
 
   if (hash_entry == NULL){
@@ -212,7 +232,7 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_
     mark_used_by_address(line, pc_plus_address);
     return;
   }
-  else if (aux_entry){
+  if (aux_entry){
     aux_entry->footprint.accessed[block] = TRUE;
   }
   else{
