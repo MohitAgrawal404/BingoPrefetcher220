@@ -45,14 +45,15 @@
 
 int64 HASH_INDEX(const Hash_Table* table, int64 key);
 int64 HASH_INDEX(const Hash_Table*  table, int64 key) {
-  int64_t mask = (~0UL) % table->buckets;
-  int64_t hash = 0;
-  int log2 = 64 - __builtin_clzl(table->buckets);
-  for (int i = 0; i < 64; i += log2) {
-    hash ^= (key & mask);
-    key = key >> log2;
+  int64_t mask = table->buckets - 1;  // Ensuring the mask is within the bucket size
+  int64 hash = 14695981039346656037UL;  // FNV-1a offset basis
+  for (int i = 0; i < 64; i += 8) {
+      // Process 8 bits at a time
+      hash ^= (key & 0xFF);  // XOR the current byte of the key
+      hash *= 1099511628211UL;  // FNV prime multiplier
+      key >>= 8;  // Move to the next byte
   }
-  return hash;
+  return hash & mask;
 }
 
 /**************************************************************************************/
