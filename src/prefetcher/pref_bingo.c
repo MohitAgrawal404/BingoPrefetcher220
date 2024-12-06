@@ -89,7 +89,7 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   Addr pc_plus_address = loadPC + lineAddr;
   Addr page_address = lineAddr >> 12;
   Addr page_offset = lineAddr & (4096 - 1);
-  int block_index = page_offset / 64
+  int block_index = page_offset / 64;
   Bingo_Table_Line* line = hash_table_access(&History_Table, pc_plus_offset);
   if (line == NULL){
     Aux_Entry* aux_entry = NULL;
