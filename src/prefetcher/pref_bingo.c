@@ -212,23 +212,29 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_
 
 // Finds the most recently used entry with a matching pc_plus_offset
 Bingo_History_Table* pref_bingo_find_event_to_fetch(Bingo_Table_Line* table_line, Addr pc_plus_offset) {
-    // for (int i = 0; i < table_line->current_size; i++) {
-    //   int index = table_line->usage_order[i];
-    //   if (table_line->line[index].pc_plus_offset == pc_plus_offset) {
-    //       return &table_line->line[index];
-    //   }
-    // }
-    return NULL;  // Not found
+  if (History_Table.count == 0){
+    return NULL;
+  }
+  for (int i = 0; i < table_line->current_size; i++) {
+    int index = table_line->usage_order[i];
+    if (table_line->line[index].pc_plus_offset == pc_plus_offset) {
+        return &table_line->line[index];
+    }
+  }
+  return NULL;  // Not found
 }
 
 Bingo_History_Table* pref_bingo_find_event_to_fetch_addr(Bingo_Table_Line* table_line, Addr pc_plus_address) {
-    // for (int i = 0; i < table_line->current_size; i++) {
-    //   int index = table_line->usage_order[i];
-    //   if (table_line->line[index].pc_plus_address == pc_plus_address) {
-    //       return &table_line->line[index];
-    //   }
-    // }
-    return NULL;  // Not found
+  if (History_Table.count == 0){
+    return NULL;
+  }
+  for (int i = 0; i < table_line->current_size; i++) {
+    int index = table_line->usage_order[i];
+    if (table_line->line[index].pc_plus_address == pc_plus_address) {
+        return &table_line->line[index];
+    }
+  }
+  return NULL;  // Not found
 }
 
 
