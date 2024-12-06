@@ -152,8 +152,9 @@ void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr) {
       table_line->current_size = 0;
       printf("leaving creation: %d\n", table_line->current_size);
     }
-
+    printf("Before add_entry, current_size = %d\n", table_line->current_size);
     add_entry(table_line, *hist_entry);
+    printf("after add_entry, current_size = %d\n", table_line->current_size);
 
 
     // Replace the entry in the history table
