@@ -84,8 +84,8 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
   //  if already in the Aux then flip a bit in the bitmap (don't change anything else)
   //  continue
   //printf("hit");
-  Addr block_address = (lineAddr >> 6) << 6; // Clear the lower 6 bits 
-  Addr pc_plus_offset = loadPC + block_address;
+  //Addr block_address = (lineAddr >> 6) << 6; // Clear the lower 6 bits 
+  //Addr pc_plus_offset = loadPC + block_address;
   //Addr pc_plus_address = loadPC + lineAddr;
   Addr page_address = lineAddr >> 12;
   Addr page_offset = lineAddr & (4096 - 1);
