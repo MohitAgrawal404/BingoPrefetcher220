@@ -147,8 +147,10 @@ void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr) {
     Bingo_Table_Line* table_line = hash_table_access(&History_Table, pc_plus_offset);
 
     if (table_line == NULL){
+      printf("in the creation\n");
       table_line = (Bingo_Table_Line*)malloc(sizeof(Bingo_Table_Line));
       table_line->current_size = 0;
+      printf("leaving creation: %d\n", table_line->current_size);
     }
 
     add_entry(table_line, *hist_entry);
