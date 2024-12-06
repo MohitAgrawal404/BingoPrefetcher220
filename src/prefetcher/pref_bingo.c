@@ -119,7 +119,8 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
 
 void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr) {
     //printf("evict");
-    return;
+    //return;
+    printf("banana\n");
     Addr page_address = lineAddr >> 12;
 
     // Access the auxiliary entry from the Aux_Storage table
