@@ -158,6 +158,12 @@ void pref_bingo_ul1_cache_evict(uns8 proc_id, Addr lineAddr) {
 
     // Replace the entry in the history table
     hash_table_access_replace(&History_Table, pc_plus_offset, &table_line);
+    Bingo_Table_Line* updated_table_line = hash_table_access(&History_Table, pc_plus_offset);
+    if (updated_table_line != NULL) {
+        printf("Table line found after update: current_size = %d\n", updated_table_line->current_size);
+    } else {
+        printf("Table line not found after update!\n");
+    }
 
     // Now free the aux_entry from Aux_Storage since we no longer need it
     hash_table_access_delete(&Aux_Storage, page_address);
