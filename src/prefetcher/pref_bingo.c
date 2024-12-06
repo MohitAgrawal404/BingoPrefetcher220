@@ -190,7 +190,6 @@ void pref_bingo_ul1_miss(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_
   //  if already in the Aux then flip a bit in the bitmap (don't change anything else)
   //  continue
   
-  return;
   Addr block_address = lineAddr >> 6; 
   Addr pc_plus_offset = loadPC + block_address;
   Addr pc_plus_address = loadPC + lineAddr;
