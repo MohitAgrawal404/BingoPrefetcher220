@@ -227,8 +227,8 @@ Bingo_History_Table* pref_bingo_find_event_to_fetch_addr(Bingo_Table_Line* table
   if (History_Table.count == 0){
     return NULL;
   }
-  print("in find_event\n")
-  print("table_line: %d\n", table_line->current_size)
+  print("in find_event\n");
+  print("table_line: %d\n", table_line->current_size);
   for (int i = 0; i < table_line->current_size; i++) {
     int index = table_line->usage_order[i];
     if (table_line->line[index].pc_plus_address == pc_plus_address) {
