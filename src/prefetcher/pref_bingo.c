@@ -73,7 +73,7 @@ void pref_bingo_init(HWP* hwp) {
     return;
   hwp->hwp_info->enabled = TRUE;
   hwp_in = *(hwp->hwp_info);
-  init_hash_table(&History_Table, "History Table", 1024, sizeof(Bingo_Table_Line));
+  init_hash_table(&History_Table, "History Table", 2048, sizeof(Bingo_Table_Line));
   init_hash_table(&Aux_Storage, "Auxiliary Storage", 1024, sizeof(Aux_Entry));
   return;
 }
