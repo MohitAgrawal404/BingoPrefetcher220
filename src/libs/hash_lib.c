@@ -435,7 +435,7 @@ void hash_table_access_replace(Hash_Table* table, int64 key,
          to it. ASSERT(0,temp->data); free(table->data_size, temp->data);
       */
       if (temp->data != NULL) {
-        free(table->data_size, temp->data);  // Free the old data if no other valid pointers exist
+        free(temp->data);  // Free the old data if no other valid pointers exist
       }
       temp->data = replacement;
       return;
