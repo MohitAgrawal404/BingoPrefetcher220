@@ -92,6 +92,21 @@ void pref_bingo_ul1_hit(uns8 proc_id, Addr lineAddr, Addr loadPC, uns32 global_h
 
   Bingo_Table_Line* line = hash_table_access(&History_Table, pc_plus_offset);
   if (line == NULL){
+    Aux_Entry* aux_entry = NULL;
+    aux_entry = hash_table_access(&Aux_Storage, page_address);
+    if (aux_entry){
+      aux_entry->footprint.accessed[block_index] = TRUE;
+    }
+    else{
+      Aux_Entry* aux_entry_temp = (Aux_Entry*)malloc(sizeof(Aux_Entry));
+      aux_entry_temp->trigger_addr = lineAddr;
+      aux_entry_temp->pc = loadPC;
+      memset(aux_entry_temp->footprint.accessed, 0, sizeof(aux_entry_temp->footprint.accessed));
+      aux_entry_temp->footprint.accessed[block_index] = TRUE;
+
+      // Store the new auxiliary entry in the aux table
+      hash_table_access_replace(&Aux_Storage, page_address, aux_entry_temp);
+    }
     return;
   }
   Bingo_History_Table* hash_entry = NULL;
